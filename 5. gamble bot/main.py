@@ -2,7 +2,7 @@ import discord
 import json
 
 client = discord.Client()
-game = discord.Game("돈 계산")
+game = discord.Game("학습")
 ledger = {}
 
 try:
@@ -27,11 +27,11 @@ async def on_message(message):
         return None
     message_to_bot = message.content.split('$')
     if message_to_bot[0] == "HELP":
-        if message_to_bot[1] == "MONEY":
-            if message_to_bot[2] == "ADD":
-                await message.channel.send("MONEY$ADD$<사용자 ID>$<추가 금액>")
-            if message_to_bot[2] == "SUB":
-                await message.channel.send("MONEY$SUB$<사용자 ID>$<감소 금액>")
+        if message_to_bot[1] == "GAMBLE":
+            if message_to_bot[2] == "JOIN":
+                await message.channel.send("갬블에 참가합니다. (기본 지급 100000BT)")
+            if message_to_bot[2] == "SLOT":
+                await message.channel.send("슬롯머신을 합니다. (소모 금액 500BT)")
 
     if message_to_bot[0] == "MONEY":
         if message_to_bot[1] == "ADD":
