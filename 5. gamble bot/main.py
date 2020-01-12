@@ -82,12 +82,12 @@ async def on_message(message):
                                 await message.channel.send("빚을 내걸면 안되죠, 손님.")
                             else:
                                 if gamble_data[str(message.author.id)]["CPU"] < gamble_data[str(message.author.id)]["USER"]:
-                                    await message.channel.send("인디안 게임에서 승리하셨습니다.\n 플레이어님께서는 " + str(cpu_bet) + "BT를 얻게 됩니다.")
+                                    await message.channel.send("인디안 게임에서 승리하셨습니다.\n플레이어님께서는 " + str(cpu_bet) + "BT를 얻게 됩니다.")
                                     ledger[str(message.author.id)] += cpu_bet
                                     with open("ledger.json", "w", encoding='utf-8') as ledger_json:
                                         ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
                                 else:
-                                    await message.channel.send("인디안 게임에서 패배하셨습니다.\n 플레이어님께서는 " + str(user_bet) + "BT를 잃게 됩니다.")
+                                    await message.channel.send("인디안 게임에서 패배하셨습니다.\n플레이어님께서는 " + str(user_bet) + "BT를 잃게 됩니다.")
                                     ledger[str(message.author.id)] -= user_bet
                                     with open("ledger.json", "w", encoding='utf-8') as ledger_json:
                                         ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
