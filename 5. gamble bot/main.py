@@ -73,25 +73,30 @@ async def on_message(message):
                     'CPU': cpu
                 }
             if message_to_bot[2] == "BET":
-                user_bet = message_to_bot[3]
-                cpu_bet = user_bet * random.random()
-                if str(message.author.id) in gamble_data:
-                    if user_bet < 0:
-                        await message.channel.send("빚을 내걸면 안되죠, 손님.")
-                    else:
-                        if gamble_data[str(message.author.id)]["CPU"] < gamble_data[str(message.author.id)]["USER"]:
-                            await message.channel.send("인디안 게임에서 승리하셨습니다.\n 플레이어님께서는 " + str(cpu_bet) + "BT를 얻게 됩니다.")
-                            ledger[str(message.author.id)] += cpu_bet
-                            with open("ledger.json", "w", encoding='utf-8') as ledger_json:
-                                ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
+                if str(message.author.id) in ledger:
+                    user_bet = float(message_to_bot[3])
+                    if user_bet < ledger[str(message.author.id)]:
+                        cpu_bet = user_bet * random.random()
+                        if str(message.author.id) in gamble_data:
+                            if user_bet < 0:
+                                await message.channel.send("빚을 내걸면 안되죠, 손님.")
+                            else:
+                                if gamble_data[str(message.author.id)]["CPU"] < gamble_data[str(message.author.id)]["USER"]:
+                                    await message.channel.send("인디안 게임에서 승리하셨습니다.\n 플레이어님께서는 " + str(cpu_bet) + "BT를 얻게 됩니다.")
+                                    ledger[str(message.author.id)] += cpu_bet
+                                    with open("ledger.json", "w", encoding='utf-8') as ledger_json:
+                                        ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
+                                else:
+                                    await message.channel.send("인디안 게임에서 패배하셨습니다.\n 플레이어님께서는 " + str(user_bet) + "BT를 잃게 됩니다.")
+                                    ledger[str(message.author.id)] -= user_bet
+                                    with open("ledger.json", "w", encoding='utf-8') as ledger_json:
+                                        ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
+                                del (gamble_data[str(message.author.id)])
                         else:
-                            await message.channel.send("인디안 게임에서 패배하셨습니다.\n 플레이어님께서는 " + str(user_bet) + "BT를 잃게 됩니다.")
-                            ledger[str(message.author.id)] -= user_bet
-                            with open("ledger.json", "w", encoding='utf-8') as ledger_json:
-                                ledger_json.write(json.dumps(ledger, ensure_ascii=False, indent=4))
-                        del(gamble_data[str(message.author.id)])
+                            await message.channel.send("인디안 포커를 시작하지 않으셨습니다.")
+                    else:
+                        await message.channel.send("손님께서 걸 수 있을 만한 금액이 아닙니다.")
                 else:
-                    await message.channel.send("인디안 포커를 시작하지 않으셨습니다.")
-
+                    await message.channel.send("장부에 등록되어있지 않은 사용자 입니다.")
 
 client.run("your token")
